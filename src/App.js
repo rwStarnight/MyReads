@@ -1,21 +1,46 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import * as BooksAPI from './BooksAPI'
+import './App.css'
+import SearchBooks from './SearchBooks'
+import ListBooks from './ListBooks'
 
-class App extends Component {
+class BooksApp extends React.Component {
+  state = {
+    books: [],
+    showSearchPage: false
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books })
+    })
+  }
+
+  moveBook = (book) => {
+    this.setState(() => ({
+        books: state.books.concat(
+            c => c.id !== book.id
+        )
+    }))
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className="app">
+        <Route exact path="/" render={() => (
+            <ListBooks
+                books={this.state.books}
+                moveBook={this.moveBook}
+            />
+        )}/>
+        <Route path="/search" render={() => (
+            <SearchBooks
+
+            />
+        )}/>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default BooksApp
